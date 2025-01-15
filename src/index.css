@@ -41,7 +41,6 @@
 }
 
 .glass-panel {
-  background: rgba(24, 24, 27, 0.8);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
@@ -53,4 +52,40 @@
 
 .code-preview {
   background: rgba(0, 0, 0, 0.2);
+}
+
+/* Syntax highlighting */
+pre {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background: #1a1a1a !important;
+  color: #f8f8f2;
+  overflow-x: auto;
+}
+
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+
+/* Line numbers */
+pre {
+  counter-reset: line;
+}
+
+code {
+  display: block;
+  position: relative;
+  padding-left: 3.5rem;
+}
+
+code::before {
+  counter-increment: line;
+  content: counter(line);
+  position: absolute;
+  left: -2.5rem;
+  width: 2rem;
+  text-align: right;
+  color: #666;
 }
