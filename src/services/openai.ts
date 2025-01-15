@@ -1,9 +1,10 @@
 import { toast } from "sonner";
+import { prepareChatMessages, formatUserMessage } from "./chatContext";
 
 const DEEPSEEK_API_URL = "https://api.deepseek.com/v1";
 
 export interface ChatMessage {
-  role: "user" | "assistant";
+  role: "user" | "assistant" | "system";
   content: string;
 }
 
@@ -13,6 +14,17 @@ export const generateChatResponse = async (messages: ChatMessage[], apiKey: stri
   }
 
   try {
+    // Prepare messages with context and system prompt
+    const formattedMessages = prepareChatMessages(messages);
+
+    // Format the last user message if it exists
+    if (formattedMessages.length > 1) {
+      const lastMessage = formattedMessages[formattedMessages.length - 1];
+      if (lastMessage.role === "user") {
+        lastMessage.content = formatUserMessage(lastMessage.content);
+      }
+    }
+
     const response = await fetch(`${DEEPSEEK_API_URL}/chat/completions`, {
       method: "POST",
       headers: {
@@ -21,7 +33,7 @@ export const generateChatResponse = async (messages: ChatMessage[], apiKey: stri
       },
       body: JSON.stringify({
         model: "deepseek-chat",
-        messages,
+        messages: formattedMessages,
         temperature: 0.7,
         max_tokens: 1000,
       }),
