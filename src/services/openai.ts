@@ -1,6 +1,6 @@
 import { toast } from "sonner";
 
-const OPENAI_API_URL = "https://api.openai.com/v1";
+const DEEPSEEK_API_URL = "https://api.deepseek.com/v1";
 
 export interface ChatMessage {
   role: "user" | "assistant";
@@ -8,15 +8,19 @@ export interface ChatMessage {
 }
 
 export const generateChatResponse = async (messages: ChatMessage[], apiKey: string): Promise<string> => {
+  if (!apiKey) {
+    throw new Error("Please enter your DeepSeek API key");
+  }
+
   try {
-    const response = await fetch(`${OPENAI_API_URL}/chat/completions`, {
+    const response = await fetch(`${DEEPSEEK_API_URL}/chat/completions`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: "deepseek-coder-33b-instruct",
+        model: "deepseek-chat",
         messages,
         temperature: 0.7,
         max_tokens: 1000,
@@ -24,8 +28,8 @@ export const generateChatResponse = async (messages: ChatMessage[], apiKey: stri
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error?.message || "Failed to generate response");
+      const errorData = await response.json();
+      throw new Error(errorData.error?.message || "Failed to generate response");
     }
 
     const data = await response.json();
