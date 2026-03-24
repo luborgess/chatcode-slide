@@ -4,6 +4,8 @@ import { ChatMessage as ChatMessageComponent } from "@/components/ChatMessage";
 import { CodePanel } from "@/components/CodePanel";
 import { generateChatResponse, ChatMessage } from "@/services/openai";
 import { toast } from "sonner";
+import { Link } from "react-router-dom";
+import { Shield } from "lucide-react";
 
 const Index = () => {
   const [messages, setMessages] = useState<Message[]>([]);
