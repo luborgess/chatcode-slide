@@ -8,20 +8,27 @@ export interface ChatMessage {
   content: string;
 }
 
-export const generateChatResponse = async (messages: ChatMessage[], apiKey: string): Promise<string> => {
+export const generateChatResponse = async (messages: ChatMessage[], apiKey: string, skipContext?: boolean): Promise<string> => {
   if (!apiKey) {
     throw new Error("Please enter your DeepSeek API key");
   }
 
   try {
-    // Prepare messages with context and system prompt
-    const formattedMessages = prepareChatMessages(messages);
+    let formattedMessages: ChatMessage[];
 
-    // Format the last user message if it exists
-    if (formattedMessages.length > 1) {
-      const lastMessage = formattedMessages[formattedMessages.length - 1];
-      if (lastMessage.role === "user") {
-        lastMessage.content = formatUserMessage(lastMessage.content);
+    if (skipContext) {
+      // Use messages as-is (for OSINT and other modules with their own system prompts)
+      formattedMessages = messages;
+    } else {
+      // Prepare messages with context and system prompt
+      formattedMessages = prepareChatMessages(messages);
+
+      // Format the last user message if it exists
+      if (formattedMessages.length > 1) {
+        const lastMessage = formattedMessages[formattedMessages.length - 1];
+        if (lastMessage.role === "user") {
+          lastMessage.content = formatUserMessage(lastMessage.content);
+        }
       }
     }
 

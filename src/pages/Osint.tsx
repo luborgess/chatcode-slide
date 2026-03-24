@@ -34,7 +34,7 @@ const Osint = () => {
 
     try {
       const messages = prepareOsintMessages(name.trim(), additionalContext.trim() || undefined);
-      const response = await generateChatResponse(messages, apiKey);
+      const response = await generateChatResponse(messages, apiKey, true);
       setReport(response);
       setSearchHistory(prev => [
         { name: name.trim(), timestamp: new Date().toLocaleString() },
