@@ -4,6 +4,8 @@ import { ChatMessage as ChatMessageComponent } from "@/components/ChatMessage";
 import { CodePanel } from "@/components/CodePanel";
 import { generateChatResponse, ChatMessage } from "@/services/openai";
 import { toast } from "sonner";
+import { Link } from "react-router-dom";
+import { Shield } from "lucide-react";
 
 const Index = () => {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -67,15 +69,22 @@ const Index = () => {
     <div className="flex h-screen w-full overflow-hidden">
       <div className="chat-gradient relative flex h-full w-full flex-col">
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
-          {/* API Key Input */}
-          <div className="mb-4">
+          {/* Top Bar */}
+          <div className="flex items-center justify-between mb-4">
             <input
               type="password"
-              placeholder="Enter your OpenAI API key"
+              placeholder="Enter your DeepSeek API key"
               value={apiKey}
               onChange={(e) => setApiKey(e.target.value)}
-              className="w-full rounded-md border border-gray-300 bg-background px-3 py-2 text-sm"
+              className="flex-1 rounded-md border border-input bg-background px-3 py-2 text-sm"
             />
+            <Link
+              to="/osint"
+              className="ml-3 flex items-center gap-2 rounded-md bg-emerald-600 hover:bg-emerald-700 px-4 py-2 text-sm font-medium text-white transition-colors"
+            >
+              <Shield className="h-4 w-4" />
+              OSINT
+            </Link>
           </div>
           
           {messages.map((message) => (
